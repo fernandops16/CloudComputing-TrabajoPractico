@@ -13,7 +13,7 @@ public class cierrecontrolador extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // No se usa en este caso
+        // No se usa
     }
 
     @Override
@@ -30,16 +30,28 @@ public class cierrecontrolador extends HttpServlet {
         cierremodelo cie = new cierremodelo();
 
         if ("btncerrar".equals(accion)) {
-            // Fecha y hora actuales para seguridad
-            java.text.SimpleDateFormat sdfFecha = new java.text.SimpleDateFormat("yyyy-MM-dd");
-            java.text.SimpleDateFormat sdfHora = new java.text.SimpleDateFormat("HH:mm:ss");
-            java.util.Date ahora = new java.util.Date();
+
+            // =========================
+            // HORA Y FECHA +1 AJUSTADA
+            // =========================
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.add(java.util.Calendar.HOUR_OF_DAY, 1);
+
+            java.util.Date ahora = cal.getTime();
+
+            java.text.SimpleDateFormat sdfFecha =
+                    new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+            java.text.SimpleDateFormat sdfHora =
+                    new java.text.SimpleDateFormat("HH:mm:ss");
 
             cie.setFecha(sdfFecha.format(ahora));
             cie.setHora(sdfHora.format(ahora));
+
             cie.setMonto(request.getParameter("txtmonto"));
             cie.setIdapertura(request.getParameter("txtapertura"));
 
+            // Ejecutar cierre
             cie.cerrarcaja();
             cie.actualizarapertura();
 
@@ -51,6 +63,6 @@ public class cierrecontrolador extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Servlet para cerrar caja";
+        return "Controlador de cierre de caja";
     }
 }

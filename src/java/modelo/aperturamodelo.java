@@ -8,8 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 public class aperturamodelo {
+
     private String codigo, fecha, hora, monto, idusuario, mensaje, idapertura;
 
+    // GETTERS Y SETTERS
     public String getCodigo() {
         return codigo;
     }
@@ -66,42 +68,58 @@ public class aperturamodelo {
         this.mensaje = mensaje;
     }
 
+    // =========================
+    // GUARDAR APERTURA
+    // =========================
     public void guardar() {
-        String sql = "INSERT INTO apertura (ape_fecha, ape_hora, ape_monto, idusuarios, ape_estado) VALUES (?, ?, ?, ?, 'ABIERTA')";
+
+        String sql = "INSERT INTO apertura (ape_fecha, ape_hora, ape_monto, idusuarios, ape_estado) "
+                   + "VALUES (?, ?, ?, ?, 'ABIERTA')";
+
         try (
             Connection conn = utilidades.conexion.obtenerConexion();
             PreparedStatement ps = conn.prepareStatement(sql)
         ) {
             ps.setString(1, fecha);
-            ps.setString(2, hora);
+            ps.setString(2, hora); // ya viene corregida desde el controlador
             ps.setString(3, monto);
             ps.setString(4, idusuario);
+
             ps.executeUpdate();
             mensaje = "✅ CAJA ABIERTA CORRECTAMENTE";
+
         } catch (SQLException ex) {
             Logger.getLogger(aperturamodelo.class.getName()).log(Level.SEVERE, null, ex);
             mensaje = "❌ ERROR AL ABRIR CAJA";
         }
     }
 
+    // =========================
+    // VERIFICAR CAJA ABIERTA
+    // =========================
     public String verificar() {
-        String sql = "SELECT idapertura FROM apertura WHERE idusuarios = ? AND ape_estado = 'ABIERTA'";
+
+        String sql = "SELECT idapertura FROM apertura "
+                   + "WHERE idusuarios = ? AND ape_estado = 'ABIERTA'";
+
         try (
             Connection conn = utilidades.conexion.obtenerConexion();
             PreparedStatement ps = conn.prepareStatement(sql)
         ) {
             ps.setString(1, idusuario);
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     idapertura = rs.getString("idapertura");
-                    return "cerrar"; // Ya hay una caja abierta
+                    return "cerrar";
                 } else {
-                    return "abrir"; // Se puede abrir una nueva
+                    return "abrir";
                 }
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(aperturamodelo.class.getName()).log(Level.SEVERE, null, ex);
-            return "error"; // Fallo en verificación
+            return "error";
         }
     }
 }

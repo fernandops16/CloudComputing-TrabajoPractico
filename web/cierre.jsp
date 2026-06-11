@@ -127,65 +127,138 @@
                 </div>
             </nav>
         </header>
-     <main class="container mt-5 p-4 rounded shadow" style="max-width: 500px;">
-    <%
-        aperturamodelo ape = new aperturamodelo();
-        String idusu = (String) session.getAttribute("codigo");
-        ape.setIdusuario(idusu);
+     <main class="container py-5">
 
-        String estadoCaja = ape.verificar();
-    %>
+<%
+    // =========================
+    // VERIFICAR CAJA ABIERTA
+    // =========================
+    aperturamodelo ape = new aperturamodelo();
+    String idusu = (String) session.getAttribute("codigo");
+    ape.setIdusuario(idusu);
 
-    <h2 class="text-center mb-4 text-danger">🧾 CERRAR CAJA</h2>
+    String estadoCaja = ape.verificar();
 
-    <% if ("cerrar".equals(estadoCaja)) { %>
+    // =========================
+    // HORA +1 AJUSTADA
+    // =========================
+    java.util.Calendar cal = java.util.Calendar.getInstance();
+    cal.add(java.util.Calendar.HOUR_OF_DAY, 1);
+
+    String horaAjustada = new java.text.SimpleDateFormat("HH:mm:ss").format(cal.getTime());
+    String fechaActual = new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
+    String fechaBD = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
+%>
+
+<div class="card border-0 shadow-lg mx-auto" style="max-width: 600px; border-radius: 20px; overflow: hidden;">
+
+    <div class="bg-danger text-white text-center p-4">
+        <h2 class="mb-1">🧾 Cierre de Caja</h2>
+        <small>Registro de finalización de jornada</small>
+    </div>
+
+    <div class="card-body p-4">
+
+        <!-- FECHA Y HORA -->
+        <div class="alert alert-light border mb-4">
+            <div class="row text-center">
+                <div class="col-6">
+                    <strong>📅 Fecha</strong><br>
+                    <%= fechaActual %>
+                </div>
+                <div class="col-6">
+                    <strong>⏰ Hora</strong><br>
+                    <%= horaAjustada %>
+                </div>
+            </div>
+        </div>
+
+        <%
+            if ("cerrar".equals(estadoCaja)) {
+        %>
+
         <form action="cierrecontrolador" method="post">
+
             <div class="mb-3">
-                <label class="form-label">📅 Fecha:</label>
-                <input type="text" name="txtfecha" value="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" readonly class="form-control">
+                <label class="form-label fw-bold">💵 Monto de Cierre</label>
+                <input type="number"
+                       name="txtmonto"
+                       class="form-control form-control-lg"
+                       placeholder="Ingrese el monto final de caja"
+                       required
+                       step="0.01"
+                       min="0">
             </div>
 
             <div class="mb-3">
-                <label class="form-label">⏰ Hora:</label>
-                <input type="text" name="txthora" value="<%= new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) %>" readonly class="form-control">
+                <label class="form-label fw-bold">🔐 ID de Apertura</label>
+                <input type="text"
+                       name="txtapertura"
+                       value="<%= ape.getIdapertura() %>"
+                       readonly
+                       class="form-control bg-light">
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">💵 Monto de Cierre:</label>
-                <input type="number" name="txtmonto" class="form-control" placeholder="Ingrese monto actual..." required step="0.01" min="0">
-            </div>
+            <!-- FECHA -->
+            <input type="hidden" name="txtfecha" value="<%= fechaBD %>">
 
-            <div class="mb-3">
-                <label class="form-label">🔐 ID de Apertura:</label>
-                <input type="text" name="txtapertura" value="<%= ape.getIdapertura() %>" readonly class="form-control">
-            </div>
+            <!-- HORA +1 -->
+            <input type="hidden" name="txthora" value="<%= horaAjustada %>">
 
-            <div class="d-grid">
-                <button type="submit" name="accion" value="btncerrar" class="btn btn-danger">
-                    ✅ CERRAR CAJA
+            <div class="d-grid mt-4">
+                <button type="submit"
+                        name="accion"
+                        value="btncerrar"
+                        class="btn btn-danger btn-lg">
+                    🔒 Cerrar Caja
                 </button>
             </div>
-        </form>
-    <% } else if ("abrir".equals(estadoCaja)) { %>
-        <div class="alert alert-warning text-center">
-            ⚠️ No hay ninguna caja abierta para cerrar. Puedes abrir una nueva caja.
-        </div>
-    <% } else { %>
-        <div class="alert alert-danger text-center">
-            ❌ Error al verificar el estado de la caja. Intente nuevamente más tarde.
-        </div>
-    <% } %>
 
-    <%
-        String mensaje = (String) request.getAttribute("mensajecie");
-        if (mensaje != null) {
-    %>
-    <div class="alert alert-info mt-3 text-center">
-        <%= mensaje %>
+        </form>
+
+        <%
+            } else if ("abrir".equals(estadoCaja)) {
+        %>
+
+        <div class="alert alert-warning text-center shadow-sm">
+            <h5>⚠ Sin caja abierta</h5>
+            No existe ninguna caja abierta para cerrar.
+        </div>
+
+        <%
+            } else {
+        %>
+
+        <div class="alert alert-danger text-center shadow-sm">
+            <h5>❌ Error</h5>
+            Ocurrió un problema al verificar el estado de la caja.
+        </div>
+
+        <%
+            }
+        %>
+
+        <%
+            String mensaje = (String) request.getAttribute("mensajecie");
+            if (mensaje != null) {
+        %>
+
+        <div class="alert alert-info mt-4 text-center shadow-sm">
+            <%= mensaje %>
+        </div>
+
+        <%
+            }
+        %>
+
     </div>
-    <%
-        }
-    %>
+
+    <div class="card-footer bg-light text-center">
+        <small class="text-muted">🔒 Sistema protegido y monitoreado</small>
+    </div>
+
+</div>
+
 </main>
 
                 

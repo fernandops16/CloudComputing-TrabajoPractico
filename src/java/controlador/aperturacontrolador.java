@@ -1,6 +1,8 @@
 package controlador;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +15,7 @@ public class aperturacontrolador extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Método sin uso en este caso
+        // No se usa
     }
 
     @Override
@@ -25,18 +27,28 @@ public class aperturacontrolador extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         processRequest(request, response);
+
         String accion = request.getParameter("accion");
         aperturamodelo ape = new aperturamodelo();
 
-        if (accion.equals("btnabrir")) {
+        if ("btnabrir".equals(accion)) {
+
             ape.setFecha(request.getParameter("txtfecha"));
-            ape.setHora(request.getParameter("txthora"));
+
+            // ✔️ Hora corregida +1 hora (parche)
+            LocalTime horaActual = LocalTime.now().plusHours(1);
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
+            String horaCorregida = horaActual.format(formato);
+
+            ape.setHora(horaCorregida);
+
             ape.setMonto(request.getParameter("txtmonto"));
             ape.setIdusuario(request.getParameter("txtidusuario"));
 
-            // Verificar si ya hay caja abierta antes de guardar
-            String estado = ape.verificar(); // "cerrar" si ya hay una caja abierta
+            // Verificar si ya hay caja abierta
+            String estado = ape.verificar();
 
             if ("cerrar".equals(estado)) {
                 request.setAttribute("mensaje", "❌ Ya hay una caja abierta. Debe cerrarla antes de abrir una nueva.");
@@ -53,6 +65,6 @@ public class aperturacontrolador extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Controlador de apertura de caja";
     }
 }

@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class cierremodelo {
+
     private String fecha, hora, monto, idapertura;
 
     public String getFecha() {
@@ -41,32 +42,46 @@ public class cierremodelo {
         this.idapertura = idapertura;
     }
 
-    // Guardar el cierre de caja
+    // =========================
+    // GUARDAR CIERRE DE CAJA
+    // =========================
     public void cerrarcaja() {
-        String sql = "INSERT INTO cierre (cie_fecha, cie_hora, cie_monto, idapertura) VALUES (?, ?, ?, ?)";
+
+        String sql = "INSERT INTO cierre (cie_fecha, cie_hora, cie_monto, idapertura) "
+                   + "VALUES (?, ?, ?, ?)";
+
         try (
             Connection conn = utilidades.conexion.obtenerConexion();
             PreparedStatement ps = conn.prepareStatement(sql)
         ) {
+
             ps.setString(1, fecha);
-            ps.setString(2, hora);
+            ps.setString(2, hora); // ya viene ajustada desde el controlador (+1)
             ps.setString(3, monto);
             ps.setString(4, idapertura);
+
             ps.executeUpdate();
+
         } catch (SQLException ex) {
             Logger.getLogger(cierremodelo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    // Actualizar el estado de la apertura a CERRADA
+    // =========================
+    // ACTUALIZAR APERTURA
+    // =========================
     public void actualizarapertura() {
+
         String sql = "UPDATE apertura SET ape_estado = 'CERRADA' WHERE idapertura = ?";
+
         try (
             Connection conn = utilidades.conexion.obtenerConexion();
             PreparedStatement ps = conn.prepareStatement(sql)
         ) {
+
             ps.setString(1, idapertura);
             ps.executeUpdate();
+
         } catch (SQLException ex) {
             Logger.getLogger(cierremodelo.class.getName()).log(Level.SEVERE, null, ex);
         }

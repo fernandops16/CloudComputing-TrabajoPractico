@@ -134,61 +134,113 @@
             </nav>
         </header>
 
-<main class="container mt-5 p-4 rounded shadow" style="max-width: 500px;">
-    <h2 class="text-center mb-4 text-primary">💰 ABRIR CAJA</h2>
+<main class="container py-5">
 
-    <%
-        if("cerrar".equals(estadoCaja)) {
-    %>
-        <div class="alert alert-warning text-center">
-            ❌ Ya hay una caja abierta. Debe cerrarla antes de abrir una nueva.
-        </div>
-    <%
-        } else {
-    %>
+<div class="card border-0 shadow-lg mx-auto" style="max-width: 600px; border-radius: 20px; overflow: hidden;">
 
-    <form action="aperturacontrolador" method="post">
-        <div class="mb-3">
-            <label class="form-label">📅 Fecha:</label>
-            <input type="text" name="txtfecha" value="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" readonly class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">⏰ Hora:</label>
-            <input type="text" name="txthora" value="<%= new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) %>" readonly class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">💵 Monto de Apertura:</label>
-            <input type="number" name="txtmonto" class="form-control" placeholder="Ingrese monto inicial..." required step="0.01" min="0">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">👤 Usuario:</label>
-            <input type="text" name="txtidusuario" value="<%= codigoUsuario %>" readonly class="form-control">
-        </div>
-
-        <div class="d-grid">
-            <button type="submit" name="accion" value="btnabrir" class="btn btn-success">
-                🚀 ABRIR CAJA
-            </button>
-        </div>
-    </form>
-
-    <%
-        }
-    %>
-
-    <%
-        String mensaje = (String) request.getAttribute("mensaje");
-        if (mensaje != null) {
-    %>
-    <div class="alert alert-info mt-3 text-center">
-        <%= mensaje %>
+    <div class="bg-primary text-white text-center p-4">
+        <h2 class="mb-1">💰 Apertura de Caja</h2>
+        <small>Registro de inicio de jornada</small>
     </div>
-    <%
-        }
-    %>
+
+    <div class="card-body p-4">
+
+        <!-- ===================== -->
+        <!-- FECHA Y HORA (+1) -->
+        <!-- ===================== -->
+        <%
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.add(java.util.Calendar.HOUR_OF_DAY, 1);
+
+            String horaAjustada = new java.text.SimpleDateFormat("HH:mm:ss").format(cal.getTime());
+            String fechaActual = new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
+            String fechaBD = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
+        %>
+
+        <div class="alert alert-light border mb-4">
+            <div class="row text-center">
+                <div class="col-6">
+                    <strong>📅 Fecha</strong><br>
+                    <%= fechaActual %>
+                </div>
+                <div class="col-6">
+                    <strong>⏰ Hora</strong><br>
+                    <%= horaAjustada %>
+                </div>
+            </div>
+        </div>
+
+        <%
+            if("cerrar".equals(estadoCaja)) {
+        %>
+
+        <div class="alert alert-warning text-center shadow-sm">
+            <h5>⚠ Caja ya abierta</h5>
+            Debe realizar el cierre de caja antes de registrar una nueva apertura.
+        </div>
+
+        <%
+            } else {
+        %>
+
+        <form action="aperturacontrolador" method="post">
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">💵 Monto Inicial</label>
+                <input type="number" name="txtmonto"
+                       class="form-control form-control-lg"
+                       required step="0.01" min="0">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">👤 Usuario</label>
+                <input type="text" name="txtidusuario"
+                       value="<%= codigoUsuario %>"
+                       readonly class="form-control bg-light">
+            </div>
+
+            <!-- FECHA PARA BD -->
+            <input type="hidden" name="txtfecha" value="<%= fechaBD %>">
+
+            <!-- HORA CORREGIDA (+1) -->
+            <input type="hidden" name="txthora" value="<%= horaAjustada %>">
+
+            <div class="d-grid mt-4">
+                <button type="submit"
+                        name="accion"
+                        value="btnabrir"
+                        class="btn btn-success btn-lg">
+                    🚀 Abrir Caja
+                </button>
+            </div>
+
+        </form>
+
+        <%
+            }
+        %>
+
+        <%
+            String mensaje = (String) request.getAttribute("mensaje");
+            if (mensaje != null) {
+        %>
+
+        <div class="alert alert-info mt-4 text-center shadow-sm">
+            <%= mensaje %>
+        </div>
+
+        <%
+            }
+        %>
+
+    </div>
+
+    <div class="card-footer bg-light text-center">
+        <small class="text-muted">🔒 Sistema protegido y monitoreado</small>
+    </div>
+
+</div>
+
 </main>
 
             <footer>

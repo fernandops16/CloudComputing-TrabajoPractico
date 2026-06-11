@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ce8f75b6-7e13-412c-88ce-8a6de742b729">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="factura" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     if(productos.`pro_iva`='0',detalleventas.`det_precio`*detalleventas.`det_cantidad`,' ') AS exenta,
+     if(productos.`pro_iva`='5',detalleventas.`det_precio`*detalleventas.`det_cantidad`,' ') AS CINCO,
+     if(productos.`pro_iva`='10',detalleventas.`det_precio`*detalleventas.`det_cantidad`,' ') AS DIEZ,
+     detalleventas.`det_cantidad` AS detalleventas_det_cantidad,
+     detalleventas.`det_precio` AS detalleventas_det_precio,
+     productos.`pro_nombre` AS productos_pro_nombre,
+     productos.`pro_iva` AS productos_pro_iva,
+     detalleventas.`idventas` AS detalleventas_idventas
+FROM
+     `productos` productos INNER JOIN `detalleventas` detalleventas ON productos.`idproductos` = detalleventas.`idproductos`
+where detalleventas.`idventas`=$P{factura}]]>
+	</queryString>
+	<field name="exenta" class="java.lang.String"/>
+	<field name="CINCO" class="java.lang.String"/>
+	<field name="DIEZ" class="java.lang.String"/>
+	<field name="detalleventas_det_cantidad" class="java.lang.Integer"/>
+	<field name="detalleventas_det_precio" class="java.lang.Integer"/>
+	<field name="productos_pro_nombre" class="java.lang.String"/>
+	<field name="productos_pro_iva" class="java.lang.Integer"/>
+	<field name="detalleventas_idventas" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="0" width="85" height="20" uuid="0ee2371b-4db2-468f-9e98-d534be776d47"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{detalleventas_det_cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="86" y="0" width="150" height="20" uuid="3051fa22-41c0-4e47-9795-ab1582d14135"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productos_pro_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="236" y="0" width="81" height="20" uuid="fef37415-716d-4fdf-ac1f-62f0620d3cbb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{detalleventas_det_precio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="317" y="0" width="78" height="20" uuid="7ce8ee25-4cba-4ac2-b1a1-0c1308433855"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="0" width="69" height="20" uuid="26b9f4f9-4041-4884-a973-2787928eeadd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CINCO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="464" y="0" width="91" height="20" uuid="f48ea46b-7c1b-4585-9a61-71d400459411"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIEZ}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

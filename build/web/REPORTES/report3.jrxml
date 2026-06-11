@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report3" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0d818e9d-fec3-4b6c-a9bc-dde7f7c68fbb">
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     CONCAT(clientes.`nombre`,' ',clientes.`apellido`) AS cliente,
+     if(ventas.`ven_condicion`='CONTADO','X',' ') AS contado,
+     if(ventas.`ven_condicion`='CREDITO','X',' ') AS credito,
+     ventas.`idventas` AS ventas_idventas,
+     ventas.`ven_fecha` AS ventas_ven_fecha,
+     ventas.`ven_condicion` AS ventas_ven_condicion,
+     ventas.`ven_estado` AS ventas_ven_estado,
+     ventas.`idclientes` AS ventas_idclientes,
+     ventas.`idusuarios` AS ventas_idusuarios,
+     clientes.`id` AS clientes_id,
+     clientes.`nombre` AS clientes_nombre,
+     clientes.`apellido` AS clientes_apellido,
+     clientes.`ci` AS clientes_ci,
+     usuarios.`idusuarios` AS usuarios_idusuarios,
+     usuarios.`usu_nombre` AS usuarios_usu_nombre,
+     clientes.`telefono` AS clientes_telefono
+FROM
+     `clientes` clientes INNER JOIN `ventas` ventas ON clientes.`id` = ventas.`idclientes`
+     INNER JOIN `usuarios` usuarios ON ventas.`idusuarios` = usuarios.`idusuarios`
+]]>
+	</queryString>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="contado" class="java.lang.String"/>
+	<field name="credito" class="java.lang.String"/>
+	<field name="ventas_idventas" class="java.lang.Integer"/>
+	<field name="ventas_ven_fecha" class="java.sql.Date"/>
+	<field name="ventas_ven_condicion" class="java.lang.String"/>
+	<field name="ventas_ven_estado" class="java.lang.String"/>
+	<field name="ventas_idclientes" class="java.lang.Integer"/>
+	<field name="ventas_idusuarios" class="java.lang.Integer"/>
+	<field name="clientes_id" class="java.lang.Integer"/>
+	<field name="clientes_nombre" class="java.lang.String"/>
+	<field name="clientes_apellido" class="java.lang.String"/>
+	<field name="clientes_ci" class="java.lang.Integer"/>
+	<field name="usuarios_idusuarios" class="java.lang.Integer"/>
+	<field name="usuarios_usu_nombre" class="java.lang.String"/>
+	<field name="clientes_telefono" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

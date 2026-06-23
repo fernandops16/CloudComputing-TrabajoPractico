@@ -14,5 +14,5 @@ echo [3/4] Buildando e iniciando...
 docker compose up --build -d
 
 echo [4/4] Listo!
-echo App corriendo en http://localhost:8080/lineasport
+echo App corriendo en http://localhost:8080/conexion
 pause

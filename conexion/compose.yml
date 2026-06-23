@@ -1,0 +1,33 @@
+services:
+  mysql-server:
+    image: mysql:8.0
+    container_name: mysql-lineasport
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: lineasport
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./lineasport.sql:/docker-entrypoint-initdb.d/lineasport.sql:ro
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: lineasport
+    restart: unless-stopped
+    depends_on:
+      - mysql-server
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: mysql-lineasport
+      DB_PORT: 3306
+      DB_NAME: lineasport
+      DB_USER: test
+      DB_PASSWORD: test
+
+volumes:
+  mysql_data:

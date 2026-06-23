@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpttotaliva" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="04bea685-23a9-4554-bd63-d4f90ae82bc4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="factura" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    -- IVA 5% = total / 21 (solo productos con IVA 5)
+    IFNULL(SUM(
+        CASE WHEN productos.pro_iva = '5' THEN detalleventas.det_cantidad * detalleventas.det_precio ELSE 0 END
+    ) / 21, 0) AS iva_5,
+
+    -- IVA 10% = total / 11 (solo productos con IVA 10)
+    IFNULL(SUM(
+        CASE WHEN productos.pro_iva = '10' THEN detalleventas.det_cantidad * detalleventas.det_precio ELSE 0 END
+    ) / 11, 0) AS iva_10,
+
+    -- Suma total de IVA (5% + 10%)
+    (
+        IFNULL(SUM(
+            CASE WHEN productos.pro_iva = '5' THEN detalleventas.det_cantidad * detalleventas.det_precio ELSE 0 END
+        ) / 21, 0) +
+        IFNULL(SUM(
+            CASE WHEN productos.pro_iva = '10' THEN detalleventas.det_cantidad * detalleventas.det_precio ELSE 0 END
+        ) / 11, 0)
+    ) AS total_iva
+FROM
+    productos
+JOIN
+    detalleventas ON productos.idproductos = detalleventas.idproductos
+WHERE
+    detalleventas.idventas = $P{factura}
+
+
+]]>
+	</queryString>
+	<field name="iva_5" class="java.math.BigDecimal"/>
+	<field name="iva_10" class="java.math.BigDecimal"/>
+	<field name="total_iva" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="d16ff71a-1dc0-4f0d-9110-ddfcf6a74e83"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_iva}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

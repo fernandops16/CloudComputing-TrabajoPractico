@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptproveedor" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6efd6119-321f-4c99-a222-0fa5daf1fea4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     proveedores.`id` AS proveedores_id,
+     proveedores.`nombre` AS proveedores_nombre,
+     proveedores.`ruc` AS proveedores_ruc,
+     proveedores.`telefono` AS proveedores_telefono,
+     proveedores.`correo` AS proveedores_correo,
+     usuarios.`usu_nombre` AS usuarios_usu_nombre
+FROM
+     `proveedores` proveedores,
+     `usuarios` usuarios]]>
+	</queryString>
+	<field name="proveedores_id" class="java.lang.Integer"/>
+	<field name="proveedores_nombre" class="java.lang.String"/>
+	<field name="proveedores_ruc" class="java.lang.Long"/>
+	<field name="proveedores_telefono" class="java.lang.Long"/>
+	<field name="proveedores_correo" class="java.lang.String"/>
+	<field name="usuarios_usu_nombre" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="401" y="1" width="154" height="20" uuid="01f9e30d-ba49-4e54-96ac-9d6ab4c494be"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LINEASPORT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="21" width="154" height="20" uuid="bd2a3bde-5327-420d-946a-f1d819c2038d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[lineasport@gmail.com]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="162" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="294" y="23" width="102" height="20" forecolor="#FFFFFF" backcolor="#0033FF" uuid="0caa2aab-595f-4798-8e07-71b75ea61f3a"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TELEFONO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="23" width="57" height="20" forecolor="#FFFFFF" backcolor="#0033FF" uuid="5b6dbf7a-5bb9-4c8b-b35c-49bb42252a96"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="57" y="23" width="108" height="20" forecolor="#FFFFFF" backcolor="#0033FF" uuid="ef4af099-c8cf-4c50-8fcc-0265ec394410"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="396" y="23" width="159" height="20" forecolor="#FFFFFF" backcolor="#0033FF" uuid="05065baa-79a2-4b39-bfe4-34f4c168d3c1"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CORREO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="165" y="23" width="129" height="20" forecolor="#FFFFFF" backcolor="#0033FF" uuid="d25f3f34-f7ab-40c0-be18-abc1962d06cf"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RUC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="22" uuid="9e97d917-e379-4be6-9a4e-2a5c84c2dde9"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[INFORME DE PROVEEDOR]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="22" width="555" height="1" uuid="4a7694cc-b5d0-403d-9c73-3dfba08d654d"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="137" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="20" width="57" height="20" forecolor="#0033FF" uuid="74a182fe-8a0a-4a1d-80b6-b1420e2d8184"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedores_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="57" y="20" width="108" height="20" forecolor="#0033FF" uuid="9982b48c-5da2-4e0c-b133-a9783c6c04ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedores_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="294" y="20" width="102" height="20" forecolor="#0033FF" uuid="e706adf6-e387-4cbb-a585-85f5d92fe793"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedores_telefono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="396" y="20" width="159" height="20" forecolor="#0033FF" uuid="6d0bfa8f-b7dc-428e-b396-1e02fcf257ee"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedores_correo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="165" y="20" width="129" height="20" forecolor="#0033FF" uuid="e6d4ef58-2e7a-456d-b706-324cf510a9a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedores_ruc}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="92" y="0" width="40" height="20" uuid="678b82be-fd50-4cd4-ab15-108a72a8a521"/>
+				<textElement>
+					<font size="10" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="92" height="20" uuid="7fd3b572-8fbe-4fe0-80aa-dc6c47bcc299"/>
+				<textElement textAlignment="Right">
+					<font size="10" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
